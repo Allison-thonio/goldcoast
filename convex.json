@@ -1,0 +1,9 @@
+{
+  "authProviders": [
+    {
+      "domain": "https://REPLACE_WITH_YOUR_CLERK_DOMAIN.clerk.accounts.dev",
+      "applicationID": "convex"
+    }
+  ],
+  "functions": "convex"
+}
