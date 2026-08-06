@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { DevelopingCard } from '@/components/ui/DevelopingCard'
 
 export const metadata = {
   title: 'Field Notes | Goldcoast Foundation',
@@ -70,25 +71,26 @@ export default function FieldNotes() {
         <div className="container-goldcoast">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {NOTES.map((note) => (
-              <article
-                key={note.slug}
-                className="bg-sand p-6 rounded border border-sand-deep hover:border-clay hover:shadow-lg transition-all"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <span className="font-mono text-xs text-mangrove uppercase px-2 py-1 bg-paper rounded">
-                    {note.category}
-                  </span>
-                  <time className="font-mono text-xs text-mangrove">{note.date}</time>
-                </div>
-                <h2 className="prose-heading text-lg mb-3 line-clamp-2">{note.title}</h2>
-                <p className="text-sm text-mangrove mb-4 line-clamp-3">{note.excerpt}</p>
-                <Link
-                  href={`/field-notes/${note.slug}`}
-                  className="text-clay font-mono text-xs hover:underline"
-                >
-                  Read More →
-                </Link>
-              </article>
+              <DevelopingCard key={note.slug}>
+                <article className="bg-sand p-6 rounded border border-sand-deep hover:border-clay hover:shadow-lg transition-all h-full flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-start justify-between mb-4">
+                      <span className="font-mono text-xs text-mangrove uppercase px-2 py-1 bg-paper rounded">
+                        {note.category}
+                      </span>
+                      <time className="font-mono text-xs text-mangrove">{note.date}</time>
+                    </div>
+                    <h2 className="prose-heading text-lg mb-3 line-clamp-2">{note.title}</h2>
+                    <p className="text-sm text-mangrove mb-4 line-clamp-3">{note.excerpt}</p>
+                  </div>
+                  <Link
+                    href={`/field-notes/${note.slug}`}
+                    className="text-clay font-mono text-xs hover:underline mt-auto inline-block"
+                  >
+                    Read More →
+                  </Link>
+                </article>
+              </DevelopingCard>
             ))}
           </div>
         </div>

@@ -167,7 +167,7 @@ export default function Navigation() {
                         style={{
                           animation: prefersReducedMotion
                             ? 'none'
-                            : `fadeInUp 0.4s ease-out ${0.08 * (idx + 1)}s both`,
+                            : `navLinkFadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) ${150 + idx * 60}ms both`,
                         }}
                       >
                         <Link
@@ -217,10 +217,10 @@ export default function Navigation() {
           }
         }
 
-        @keyframes fadeInUp {
+        @keyframes navLinkFadeUp {
           from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(12px);
           }
           to {
             opacity: 1;

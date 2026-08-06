@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Turnstile } from '@marsidev/react-turnstile'
 import Link from 'next/link'
+import { HandDrawnCircle } from '@/components/ui/HandDrawnCircle'
 
 export default function DonateForm() {
   const [step, setStep] = useState<'amount' | 'details' | 'method'>('amount')
@@ -99,19 +100,23 @@ export default function DonateForm() {
                   { value: 'health', label: 'Health' },
                   { value: 'education', label: 'Education' },
                   { value: 'youth', label: 'Youth Development' },
-                ].map((opt) => (
-                  <label key={opt.value} className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="programme"
-                      value={opt.value}
-                      checked={programme === opt.value}
-                      onChange={(e) => setProgramme(e.target.value)}
-                      className="rounded"
-                    />
-                    <span className="text-sm">{opt.label}</span>
-                  </label>
-                ))}
+                ].map((opt) => {
+                  const isSelected = programme === opt.value
+                  return (
+                    <label key={opt.value} className="relative flex items-center gap-3 cursor-pointer p-3 border rounded border-sand-deep bg-sand/30 hover:bg-sand transition-all">
+                      <HandDrawnCircle isSelected={isSelected} />
+                      <input
+                        type="radio"
+                        name="programme"
+                        value={opt.value}
+                        checked={isSelected}
+                        onChange={(e) => setProgramme(e.target.value)}
+                        className="rounded accent-clay"
+                      />
+                      <span className={`text-sm font-medium ${isSelected ? 'text-clay font-semibold' : 'text-ink'}`}>{opt.label}</span>
+                    </label>
+                  )
+                })}
               </div>
             </div>
 
@@ -119,19 +124,25 @@ export default function DonateForm() {
             <div>
               <label className="block text-sm font-medium text-ink mb-4">Amount (₦)</label>
               <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
-                {presets.map((preset) => (
-                  <button
-                    key={preset}
-                    onClick={() => setAmount(preset)}
-                    className={`py-3 px-3 rounded font-mono text-sm transition-all ${
-                      amount === preset
-                        ? 'bg-teal text-paper border-2 border-teal'
-                        : 'bg-sand border-2 border-sand-deep text-ink hover:border-clay'
-                    }`}
-                  >
-                    ₦{preset.toLocaleString()}
-                  </button>
-                ))}
+                {presets.map((preset) => {
+                  const isSelected = amount === preset
+                  return (
+                    <div key={preset} className="relative">
+                      <HandDrawnCircle isSelected={isSelected} />
+                      <button
+                        type="button"
+                        onClick={() => setAmount(preset)}
+                        className={`w-full py-3 px-3 rounded font-mono text-sm transition-all ${
+                          isSelected
+                            ? 'bg-clay text-paper border-2 border-clay font-bold'
+                            : 'bg-sand border-2 border-sand-deep text-ink hover:border-clay'
+                        }`}
+                      >
+                        ₦{preset.toLocaleString()}
+                      </button>
+                    </div>
+                  )
+                })}
               </div>
               <input
                 type="number"

@@ -61,3 +61,46 @@
     @apply px-6 py-3 bg-clay text-paper rounded font-medium hover:bg-clay-deep transition-colors;
   }
 }
+
+/* Motion Pattern 6: View Transitions */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: pageOut 200ms ease-out forwards;
+}
+
+::view-transition-new(root) {
+  animation: pageIn 200ms ease-out forwards;
+}
+
+@keyframes pageOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
+

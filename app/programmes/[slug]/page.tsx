@@ -49,6 +49,22 @@ const PROGRAMME_DETAILS: Record<string, any> = {
       'Career Mentorship Network',
     ],
   },
+  'youth-development': {
+    title: 'Youth Development',
+    description: 'Mentorship & Career Opportunities',
+    whatWeDo: [
+      'Talent identification and spotlighting',
+      'Mentorship and career guidance',
+      'Entrepreneurship training',
+      'Leadership development',
+      'Access to opportunities and networks',
+    ],
+    activeProjects: [
+      'Niger Delta Talent Spotlight (₦100K grants)',
+      'Youth Leadership Training',
+      'Career Mentorship Network',
+    ],
+  },
 }
 
 export const generateStaticParams = () => {
@@ -57,16 +73,23 @@ export const generateStaticParams = () => {
   }))
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const programme = PROGRAMME_DETAILS[params.slug]
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> | { slug: string } }) {
+  const resolvedParams = await params
+  const slug = resolvedParams?.slug
+  const programme = PROGRAMME_DETAILS[slug] || PROGRAMME_DETAILS['youth']
+  if (!programme) {
+    return { title: 'Programme | Goldcoast Foundation' }
+  }
   return {
     title: `${programme.title} | Goldcoast Foundation`,
     description: programme.description,
   }
 }
 
-export default function ProgrammeDetail({ params }: { params: { slug: string } }) {
-  const programme = PROGRAMME_DETAILS[params.slug]
+export default async function ProgrammeDetail({ params }: { params: Promise<{ slug: string }> | { slug: string } }) {
+  const resolvedParams = await params
+  const slug = resolvedParams?.slug
+  const programme = PROGRAMME_DETAILS[slug] || PROGRAMME_DETAILS['youth']
 
   if (!programme) {
     return (
@@ -152,7 +175,7 @@ export default function ProgrammeDetail({ params }: { params: { slug: string } }
             Your donation directly funds this programme and helps us extend our impact across the Niger Delta.
           </p>
           <Link
-            href={`/donate?programme=${params.slug}`}
+            href={`/donate?programme=${slug}`}
             className="button-primary inline-block"
           >
             Donate Now

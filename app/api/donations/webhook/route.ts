@@ -3,7 +3,7 @@ import crypto from 'crypto'
 import { api } from '@/convex/_generated/api'
 import { ConvexHttpClient } from 'convex/browser'
 
-const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL || '')
+const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL || 'https://placeholder.convex.cloud')
 
 function verifyPaystackSignature(request: Request, body: string): boolean {
   const signature = request.headers.get('x-paystack-signature')

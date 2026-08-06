@@ -6,14 +6,20 @@ interface CountUpProps {
   value: string
   duration?: number
   className?: string
+  showLoading?: boolean
 }
 
-export function CountUp({ value, duration = 1600, className = '' }: CountUpProps) {
+export function CountUp({
+  value,
+  duration = 1200,
+  className = '',
+  showLoading = true,
+}: CountUpProps) {
+  const [displayState, setDisplayState] = useState<'loading' | 'animating' | 'done'>('loading')
   const [displayValue, setDisplayValue] = useState<string>('')
-  const [hasAnimated, setHasAnimated] = useState(false)
   const elementRef = useRef<HTMLSpanElement>(null)
 
-  // Extract number and surrounding text
+  // Extract number, prefix, and static suffix (+, K, etc.)
   const match = value.match(/(\d[\d,]*)/)
   const rawNumStr = match ? match[0].replace(/,/g, '') : null
   const targetNumber = rawNumStr ? parseInt(rawNumStr, 10) : 0
@@ -22,12 +28,12 @@ export function CountUp({ value, duration = 1600, className = '' }: CountUpProps
   const suffix = match ? value.substring(matchIndex + match[0].length) : value
 
   useEffect(() => {
-    // Check reduced motion preference
+    // Check reduced motion preference for instant fallback
     if (typeof window !== 'undefined') {
       const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
       if (mediaQuery.matches) {
+        setDisplayState('done')
         setDisplayValue(value)
-        setHasAnimated(true)
         return
       }
     }
@@ -35,17 +41,21 @@ export function CountUp({ value, duration = 1600, className = '' }: CountUpProps
     const element = elementRef.current
     if (!element) return
 
+    let hasTriggered = false
+
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !hasAnimated) {
-          setHasAnimated(true)
+        if (entries[0].isIntersecting && !hasTriggered) {
+          hasTriggered = true
+          setDisplayState('animating')
           let startTimestamp: number | null = null
 
           const step = (timestamp: number) => {
             if (!startTimestamp) startTimestamp = timestamp
             const progress = Math.min((timestamp - startTimestamp) / duration, 1)
-            // Ease out cubic curve for natural decelerating count
-            const easeProgress = 1 - Math.pow(1 - progress, 3)
+
+            // easeOutExpo: fast start, slow settle
+            const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress)
             const currentCount = Math.floor(easeProgress * targetNumber)
 
             setDisplayValue(`${prefix}${currentCount.toLocaleString()}${suffix}`)
@@ -54,10 +64,12 @@ export function CountUp({ value, duration = 1600, className = '' }: CountUpProps
               window.requestAnimationFrame(step)
             } else {
               setDisplayValue(value)
+              setDisplayState('done')
             }
           }
 
           window.requestAnimationFrame(step)
+          observer.disconnect()
         }
       },
       { threshold: 0.15 }
@@ -66,12 +78,20 @@ export function CountUp({ value, duration = 1600, className = '' }: CountUpProps
     observer.observe(element)
 
     return () => observer.disconnect()
-  }, [value, targetNumber, prefix, suffix, duration, hasAnimated])
+  }, [value, targetNumber, prefix, suffix, duration])
 
   return (
     <span ref={elementRef} className={className}>
-      {hasAnimated ? displayValue : `${prefix}0${suffix}`}
+      {displayState === 'loading' && showLoading ? (
+        <span className="font-mono text-sm text-sand/60 tracking-wider animate-pulse">
+          Loading...
+        </span>
+      ) : (
+        displayValue || `${prefix}0${suffix}`
+      )}
     </span>
   )
 }
+
 export default CountUp
+
