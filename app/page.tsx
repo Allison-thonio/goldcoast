@@ -1,6 +1,7 @@
 import Hero from '@/components/Hero'
 import FieldLedger from '@/components/FieldLedger'
 import ProgrammeCarousel from '@/components/ProgrammeCarousel'
+import MarqueeStrip from '@/components/ui/MarqueeStrip'
 import Link from 'next/link'
 
 export default function Home() {
@@ -8,6 +9,9 @@ export default function Home() {
     <div className="min-h-screen">
       {/* Hero Section with Text Reveals and Photo Collage */}
       <Hero />
+
+      {/* Marquee Ticker Banner */}
+      <MarqueeStrip />
 
       {/* Field Ledger */}
       <FieldLedger />

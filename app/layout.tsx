@@ -4,6 +4,8 @@ import './globals.css'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import { Providers } from '@/components/Providers'
+import { ScrollProgress } from '@/components/ui/ScrollProgress'
+import { LoadingScreen } from '@/components/ui/LoadingScreen'
 
 export const metadata: Metadata = {
   title: 'Goldcoast Developmental Foundation',
@@ -45,17 +47,21 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <Providers>
-          <a href="#main-content" className="sr-only focus:not-sr-only">
-            Skip to main content
-          </a>
-          <Navigation />
-          <main id="main-content">
-            {children}
-          </main>
-          <Footer />
-          {process.env.NODE_ENV === 'production' && <Analytics />}
+          <LoadingScreen>
+            <ScrollProgress />
+            <a href="#main-content" className="sr-only focus:not-sr-only">
+              Skip to main content
+            </a>
+            <Navigation />
+            <main id="main-content">
+              {children}
+            </main>
+            <Footer />
+            {process.env.NODE_ENV === 'production' && <Analytics />}
+          </LoadingScreen>
         </Providers>
       </body>
     </html>
   )
 }
+
