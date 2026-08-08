@@ -28,7 +28,7 @@ export function HandDrawnCircle({ isSelected, className = '' }: HandDrawnCircleP
       <path
         d="M 8,50 C 8,20 22,8 50,8 C 78,8 92,20 92,50 C 92,80 78,92 50,92 C 22,92 8,80 8,50 C 8,36 18,12 46,9"
         fill="none"
-        stroke="#BE5A2E"
+        stroke="#D4AF37"
         strokeWidth="2.5"
         strokeLinecap="round"
         strokeLinejoin="round"

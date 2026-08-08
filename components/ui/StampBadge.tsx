@@ -31,8 +31,8 @@ export function StampBadge({ status, label, className = '' }: StampBadgeProps) {
       style={{
         transform: 'rotate(-3deg)',
         boxShadow: isConfirmed
-          ? '0 0 12px rgba(13, 92, 91, 0.25)'
-          : '0 0 12px rgba(190, 90, 46, 0.25)',
+          ? '0 0 12px rgba(15, 44, 89, 0.25)'
+          : '0 0 12px rgba(212, 175, 55, 0.25)',
         animation: prefersReducedMotion
           ? 'none'
           : 'stampIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',

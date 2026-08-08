@@ -5,15 +5,15 @@
   --font-sans: 'Inter', sans-serif;
   --font-serif: 'Fraunces', serif;
   --font-mono: 'IBM Plex Mono', monospace;
-  --color-sand: #F3ECE0;
-  --color-sand-deep: #E9DFCE;
-  --color-teal: #123A38;
-  --color-teal-ink: #0B2624;
-  --color-clay: #BE5A2E;
-  --color-clay-deep: #9C4622;
-  --color-mangrove: #57795F;
-  --color-ink: #1B2420;
-  --color-paper: #FBF8F2;
+  --color-sand: #F7F3E3;
+  --color-sand-deep: #EFE8D3;
+  --color-teal: #0F2C59;
+  --color-teal-ink: #0A192F;
+  --color-clay: #D4AF37;
+  --color-clay-deep: #B8860B;
+  --color-mangrove: #2B4C7E;
+  --color-ink: #0C1821;
+  --color-paper: #FDFBF7;
 }
 
 :root {
