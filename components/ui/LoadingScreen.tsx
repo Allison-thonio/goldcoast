@@ -39,26 +39,32 @@ export function LoadingScreen({ children }: { children: React.ReactNode }) {
         >
           {/* Left Split Curtain */}
           <div
-            className="w-1/2 h-full bg-teal flex items-center justify-end pr-2 transition-transform duration-800 ease-[cubic-bezier(0.76,0,0.24,1)]"
+            className="w-1/2 h-full bg-teal flex items-center justify-end pr-2"
             style={{
               transform: isClosing ? 'translateX(-100%)' : 'translateX(0)',
-              transitionDuration: '800ms',
+              transition: `transform 800ms var(--ease-settle)`,
             }}
           >
-            <span className="font-serif text-3xl md:text-5xl font-bold text-sand tracking-tight">
+            <span
+              className="font-serif text-3xl md:text-5xl font-bold text-sand tracking-tight"
+              style={{ fontSize: 'clamp(1.875rem, 4vw, 3rem)' }}
+            >
               Gold
             </span>
           </div>
 
           {/* Right Split Curtain */}
           <div
-            className="w-1/2 h-full bg-teal flex items-center justify-start pl-2 transition-transform duration-800 ease-[cubic-bezier(0.76,0,0.24,1)]"
+            className="w-1/2 h-full bg-teal flex items-center justify-start pl-2"
             style={{
               transform: isClosing ? 'translateX(100%)' : 'translateX(0)',
-              transitionDuration: '800ms',
+              transition: `transform 800ms var(--ease-settle)`,
             }}
           >
-            <span className="font-serif text-3xl md:text-5xl font-bold text-clay tracking-tight">
+            <span
+              className="font-serif text-3xl md:text-5xl font-bold text-clay tracking-tight"
+              style={{ fontSize: 'clamp(1.875rem, 4vw, 3rem)' }}
+            >
               coast
             </span>
           </div>

@@ -27,44 +27,102 @@ export default function FieldLedger({ programmeId }: FieldLedgerProps) {
     { label: 'Major Responses', value: '3', note: 'Flood relief interventions' },
   ]
 
+  // 3+1 layout: first entry is featured (full-width), remaining 3 form the grid
+  const featured = entries[0]
+  const gridEntries = entries.slice(1)
+
   return (
     <section className="bg-teal text-paper py-20 px-4 relative overflow-hidden">
-      {/* Background ambient glow effect */}
-      <div className="absolute -top-24 -right-24 w-96 h-96 bg-sand/10 rounded-full blur-3xl pointer-events-none" />
+      {/* ─── Atmospheric glow shapes (warm ocher depth) ─── */}
+      <div className="glow-shape glow-shape--strong -top-24 -right-24 w-96 h-96" />
+      <div className="glow-shape -bottom-16 -left-16 w-80 h-80" />
 
       <div className="container-goldcoast relative z-10">
-        {/* Registry Header */}
+        {/* ─── Section anatomy: eyebrow → heading → copy ─── */}
         <div className="mb-16">
-          <span className="inline-block font-mono text-xs text-sand uppercase tracking-widest px-3 py-1 bg-sand/10 rounded-full mb-3">
+          <span className="eyebrow text-sand bg-sand/10 mb-3">
             Impact Registry
           </span>
-          <h2 className="font-serif text-4xl font-bold mb-2">Field Ledger</h2>
+          <h2
+            className="font-serif font-bold mb-2"
+            style={{ fontSize: 'var(--text-section)' }}
+          >
+            Field Ledger
+          </h2>
           <p className="font-mono text-sm text-paper/80">
             Registry of service and impact across Niger Delta communities
           </p>
         </div>
 
-        {/* Registry Entries */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {entries.map((entry, idx) => (
+        {/* ─── Featured stat (3+1 pattern: 1 dominant, 3 supporting) ─── */}
+        <div
+          className="group border-l-4 border-clay hover:border-paper pl-8 py-6 bg-teal-ink/20 hover:bg-teal-ink/30 rounded-r-lg mb-8"
+          style={{
+            animation: prefersReducedMotion
+              ? 'none'
+              : `slideInLeft var(--duration-reveal) var(--ease-settle) both`,
+            transition: `background-color var(--duration-hover) var(--ease-settle), border-color var(--duration-hover) var(--ease-settle)`,
+          }}
+        >
+          <div className="font-mono text-xs text-sand/80 group-hover:text-sand mb-3 flex items-center justify-between"
+            style={{ transition: `color var(--duration-hover) var(--ease-settle)` }}
+          >
+            <span>ENTRY #01</span>
+            <span
+              className="w-2.5 h-2.5 rounded-full bg-clay group-hover:bg-sand"
+              style={{ transition: `all var(--duration-hover) var(--ease-settle)` }}
+            />
+          </div>
+          {/* Featured numeral — uses --text-stat at hero-adjacent scale */}
+          <div
+            className="font-serif font-bold mb-2 text-sand group-hover:text-paper tabular-nums"
+            style={{
+              fontSize: 'var(--text-hero)',
+              transition: `color var(--duration-hover) var(--ease-settle)`,
+            }}
+          >
+            <CountUp value={featured.value} />
+          </div>
+          <h3 className="font-mono text-sm font-semibold mb-1 text-paper">
+            {featured.label}
+          </h3>
+          <p className="font-mono text-xs text-paper/70">{featured.note}</p>
+        </div>
+
+        {/* ─── 3-up grid (spec: consistently 3-up on desktop) ─── */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {gridEntries.map((entry, idx) => (
             <div
               key={idx}
-              className="group border-l-4 border-sand hover:border-paper pl-6 py-4 bg-teal/40 hover:bg-teal-ink/30 rounded-r-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg"
+              className="group border-l-4 border-sand hover:border-paper pl-6 py-4 bg-teal/40 hover:bg-teal-ink/30 rounded-r-lg hover-lift"
               style={{
                 animation: prefersReducedMotion
                   ? 'none'
-                  : `slideInLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.1 * idx}s both`,
+                  : `slideInLeft var(--duration-reveal) var(--ease-settle) ${0.1 * (idx + 1)}s both`,
+                transition: `background-color var(--duration-hover) var(--ease-settle), border-color var(--duration-hover) var(--ease-settle)`,
               }}
             >
               {/* Entry Number */}
-              <div className="font-mono text-xs text-sand/80 group-hover:text-sand mb-3 transition-colors flex items-center justify-between">
-                <span>ENTRY #{String(idx + 1).padStart(2, '0')}</span>
-                <span className="w-2 h-2 rounded-full bg-sand/40 group-hover:bg-sand group-hover:scale-125 transition-all duration-300" />
+              <div
+                className="font-mono text-xs text-sand/80 group-hover:text-sand mb-3 flex items-center justify-between"
+                style={{ transition: `color var(--duration-hover) var(--ease-settle)` }}
+              >
+                <span>ENTRY #{String(idx + 2).padStart(2, '0')}</span>
+                <span
+                  className="w-2 h-2 rounded-full bg-sand/40 group-hover:bg-sand"
+                  style={{ transition: `all var(--duration-hover) var(--ease-settle)` }}
+                />
               </div>
 
-              {/* Value with CountUp Animation */}
-              <div className="font-serif text-5xl md:text-6xl font-bold mb-2 text-sand group-hover:text-paper transition-colors">
-                <CountUp value={entry.value} duration={1800} />
+              {/* Stat numeral — uses --text-stat (same size class as section heading) */}
+              <div
+                className="font-serif font-bold mb-2 text-sand group-hover:text-paper tabular-nums"
+                style={{
+                  fontSize: 'var(--text-stat)',
+                  transition: `color var(--duration-hover) var(--ease-settle)`,
+                }}
+              >
+                <CountUp value={entry.value} />
               </div>
 
               {/* Label */}
@@ -92,26 +150,6 @@ export default function FieldLedger({ programmeId }: FieldLedgerProps) {
           </div>
         </div>
       </div>
-
-      <style>{`
-        @keyframes slideInLeft {
-          from {
-            opacity: 0;
-            transform: translateX(-24px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          * {
-            animation: none !important;
-          }
-        }
-      `}</style>
     </section>
   )
 }
-

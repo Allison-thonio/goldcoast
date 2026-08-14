@@ -4,18 +4,17 @@ import { useEffect, useRef, useState } from 'react'
 
 interface CountUpProps {
   value: string
+  /** Duration in ms. Defaults to CSS --duration-counter (1500ms) */
   duration?: number
   className?: string
-  showLoading?: boolean
 }
 
 export function CountUp({
   value,
-  duration = 1200,
+  duration = 1500,
   className = '',
-  showLoading = true,
 }: CountUpProps) {
-  const [displayState, setDisplayState] = useState<'loading' | 'animating' | 'done'>('loading')
+  const [displayState, setDisplayState] = useState<'idle' | 'animating' | 'done'>('idle')
   const [displayValue, setDisplayValue] = useState<string>('')
   const elementRef = useRef<HTMLSpanElement>(null)
 
@@ -26,6 +25,9 @@ export function CountUp({
   const matchIndex = match ? value.indexOf(match[0]) : -1
   const prefix = matchIndex > 0 ? value.substring(0, matchIndex) : ''
   const suffix = match ? value.substring(matchIndex + match[0].length) : value
+
+  // Show "00" zero-state instead of "Loading..." — avoids credibility issue
+  const zeroState = `${prefix}0${suffix}`
 
   useEffect(() => {
     // Check reduced motion preference for instant fallback
@@ -40,6 +42,9 @@ export function CountUp({
 
     const element = elementRef.current
     if (!element) return
+
+    // Set zero-state immediately
+    setDisplayValue(zeroState)
 
     let hasTriggered = false
 
@@ -78,20 +83,13 @@ export function CountUp({
     observer.observe(element)
 
     return () => observer.disconnect()
-  }, [value, targetNumber, prefix, suffix, duration])
+  }, [value, targetNumber, prefix, suffix, zeroState, duration])
 
   return (
     <span ref={elementRef} className={className}>
-      {displayState === 'loading' && showLoading ? (
-        <span className="font-mono text-sm text-sand/60 tracking-wider animate-pulse">
-          Loading...
-        </span>
-      ) : (
-        displayValue || `${prefix}0${suffix}`
-      )}
+      {displayValue || zeroState}
     </span>
   )
 }
 
 export default CountUp
-

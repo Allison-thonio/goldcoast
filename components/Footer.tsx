@@ -7,7 +7,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           {/* About */}
           <div>
-            <h3 className="font-serif text-lg font-bold mb-4">Goldcoast Foundation</h3>
+            <h3
+              className="font-serif font-bold mb-4"
+              style={{ fontSize: 'var(--text-body-lg)' }}
+            >
+              Goldcoast Foundation
+            </h3>
             <p className="text-sm leading-relaxed">
               Service, carried on from one generation to the next. Registered Foundation in Bayelsa, Nigeria, established 2012.
             </p>
@@ -15,25 +20,30 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-serif text-lg font-bold mb-4">Quick Links</h3>
+            <h3
+              className="font-serif font-bold mb-4"
+              style={{ fontSize: 'var(--text-body-lg)' }}
+            >
+              Quick Links
+            </h3>
             <ul className="text-sm space-y-2">
               <li>
-                <Link href="/about" className="hover:text-clay transition-colors">
+                <Link href="/about" className="link-hover-clay">
                   About
                 </Link>
               </li>
               <li>
-                <Link href="/programmes" className="hover:text-clay transition-colors">
+                <Link href="/programmes" className="link-hover-clay">
                   Programmes
                 </Link>
               </li>
               <li>
-                <Link href="/field-notes" className="hover:text-clay transition-colors">
+                <Link href="/field-notes" className="link-hover-clay">
                   Field Notes
                 </Link>
               </li>
               <li>
-                <Link href="/donate" className="hover:text-clay transition-colors">
+                <Link href="/donate" className="link-hover-clay">
                   Donate
                 </Link>
               </li>
@@ -42,20 +52,25 @@ export default function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 className="font-serif text-lg font-bold mb-4">Legal</h3>
+            <h3
+              className="font-serif font-bold mb-4"
+              style={{ fontSize: 'var(--text-body-lg)' }}
+            >
+              Legal
+            </h3>
             <ul className="text-sm space-y-2">
               <li>
-                <Link href="/privacy-policy" className="hover:text-clay transition-colors">
+                <Link href="/privacy-policy" className="link-hover-clay">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="hover:text-clay transition-colors">
+                <Link href="/terms" className="link-hover-clay">
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-clay transition-colors">
+                <Link href="/contact" className="link-hover-clay">
                   Contact
                 </Link>
               </li>

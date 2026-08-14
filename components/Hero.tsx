@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 interface HeroProps {
   tagline?: string
-  title: string
+  title?: string
   subtitle?: string
   ctaLabel?: string
   ctaLink?: string
@@ -36,7 +36,7 @@ export default function Hero({
       return
     }
 
-    let delay = 200
+    let delay = 150
     words.forEach((_, idx) => {
       setTimeout(() => {
         setWordStates((prev) => {
@@ -44,149 +44,111 @@ export default function Hero({
           next[idx] = true
           return next
         })
-      }, delay + idx * 80)
+      }, delay + idx * 60)
     })
   }, [title, prefersReducedMotion])
 
   const words = title.split(' ')
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-paper py-24 px-4 overflow-hidden">
-      {/* Collage Background Images */}
-      <div className="absolute inset-0 pointer-events-none">
-        {/* Top Left */}
-        <div
-          className="absolute top-12 left-4 w-24 h-24 md:w-40 md:h-40 bg-gradient-to-br from-sand to-sand-deep rounded opacity-60"
-          style={{
-            animation: prefersReducedMotion ? 'none' : 'scaleIn 1s ease-out 0.1s both',
-          }}
-        >
-          {/* Placeholder for image - NEEDS REAL DATA */}
-        </div>
+    <section className="relative min-h-[85vh] flex items-center justify-start bg-paper pt-32 pb-20 px-4 overflow-hidden border-b border-sand-deep/40">
+      {/* ─── Ambient Glow Backgrounds ─── */}
+      <div className="glow-shape glow-shape--strong -top-32 -left-24 w-[550px] h-[550px]" />
+      <div className="glow-shape -bottom-20 right-10 w-[450px] h-[450px] opacity-70" />
 
-        {/* Top Right */}
-        <div
-          className="absolute top-24 right-6 w-28 h-28 md:w-48 md:h-48 bg-gradient-to-br from-teal/20 to-teal/10 rounded opacity-70"
-          style={{
-            animation: prefersReducedMotion ? 'none' : 'scaleIn 1s ease-out 0.3s both',
-          }}
-        >
-          {/* Placeholder for image - NEEDS REAL DATA */}
-        </div>
-
-        {/* Bottom Left */}
-        <div
-          className="absolute bottom-12 left-2 w-20 h-20 md:w-36 md:h-36 bg-gradient-to-br from-clay/30 to-clay/20 rounded opacity-50"
-          style={{
-            animation: prefersReducedMotion ? 'none' : 'scaleIn 1s ease-out 0.5s both',
-          }}
-        >
-          {/* Placeholder for image - NEEDS REAL DATA */}
-        </div>
-
-        {/* Bottom Right */}
-        <div
-          className="absolute bottom-6 right-4 w-32 h-32 md:w-52 md:h-52 bg-gradient-to-br from-mangrove/20 to-mangrove/10 rounded opacity-60"
-          style={{
-            animation: prefersReducedMotion ? 'none' : 'scaleIn 1s ease-out 0.4s both',
-          }}
-        >
-          {/* Placeholder for image - NEEDS REAL DATA */}
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="container-goldcoast text-center max-w-3xl mx-auto relative z-10">
-        {/* Tagline */}
-        <p
-          className="font-mono text-sm text-mangrove mb-8 leading-relaxed"
-          style={{
-            animation: prefersReducedMotion ? 'none' : 'fadeIn 0.8s ease-out',
-          }}
-        >
-          {tagline}
-        </p>
-
-        {/* Title - Word by Word Reveal */}
-        <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl font-bold text-ink mb-8 leading-tight">
-          {words.map((word, idx) => (
-            <span
-              key={idx}
+      {/* ─── Hero Left-Aligned Container Grid ─── */}
+      <div className="container-goldcoast relative z-10 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Left Text Column */}
+          <div className="lg:col-span-8 text-left space-y-8 max-w-3xl">
+            {/* Tagline / Eyebrow */}
+            <div
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-widest uppercase text-mangrove bg-sand-deep/80 border border-sand-deep"
               style={{
-                display: 'inline-block',
-                marginRight: '0.25em',
-                opacity: wordStates[idx] ? 1 : 0,
-                transform: wordStates[idx] ? 'translateY(0)' : 'translateY(10px)',
-                transition: prefersReducedMotion
-                  ? 'none'
-                  : 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                animation: prefersReducedMotion ? 'none' : 'fadeIn 0.6s var(--ease-settle)',
               }}
             >
-              {word}
-            </span>
-          ))}
-        </h1>
+              <span className="w-2 h-2 rounded-full bg-clay animate-pulse" />
+              {tagline}
+            </div>
 
-        {/* Subtitle */}
-        <p
-          className="text-lg text-mangrove mb-12 leading-relaxed"
-          style={{
-            animation: prefersReducedMotion ? 'none' : 'fadeIn 0.8s ease-out 0.6s both',
-          }}
-        >
-          {subtitle}
-        </p>
+            {/* Hero Headline */}
+            <h1
+              className="font-serif font-bold text-ink leading-[1.08] tracking-tight text-left"
+              style={{ fontSize: 'var(--text-hero)' }}
+            >
+              {words.map((word, idx) => (
+                <span
+                  key={idx}
+                  style={{
+                    display: 'inline-block',
+                    marginRight: '0.22em',
+                    opacity: wordStates[idx] ? 1 : 0,
+                    transform: wordStates[idx] ? 'translateY(0)' : 'translateY(12px)',
+                    transition: prefersReducedMotion ? 'none' : `all 0.55s var(--ease-settle)`,
+                  }}
+                >
+                  {word}
+                </span>
+              ))}
+            </h1>
 
-        {/* CTAs */}
-        <div
-          className="flex gap-4 justify-center flex-wrap"
-          style={{
-            animation: prefersReducedMotion ? 'none' : 'fadeIn 0.8s ease-out 0.8s both',
-          }}
-        >
-          <Link
-            href={ctaLink || '/donate'}
-            className="px-8 py-4 bg-teal text-paper rounded font-medium hover:bg-teal-ink transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
-          >
-            {ctaLabel}
-          </Link>
-          <Link
-            href="/about"
-            className="px-8 py-4 bg-transparent border-2 border-teal text-teal rounded font-medium hover:bg-teal hover:text-paper transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal"
-          >
-            Learn More
-          </Link>
+            {/* Subtitle */}
+            <p
+              className="text-mangrove/90 leading-relaxed max-w-2xl text-left"
+              style={{
+                fontSize: 'var(--text-body-lg)',
+                animation: prefersReducedMotion ? 'none' : 'fadeIn 0.8s var(--ease-settle) 0.4s both',
+              }}
+            >
+              {subtitle}
+            </p>
+
+            {/* CTAs Left-Aligned */}
+            <div
+              className="flex items-center gap-4 pt-2 flex-wrap text-left justify-start"
+              style={{
+                animation: prefersReducedMotion ? 'none' : 'fadeIn 0.8s var(--ease-settle) 0.6s both',
+              }}
+            >
+              <Link
+                href={ctaLink || '/donate'}
+                className="button-primary px-8 py-4 rounded-xl shadow-lg hover:shadow-teal/20 text-base font-semibold"
+              >
+                {ctaLabel}
+              </Link>
+              <Link
+                href="/about"
+                className="px-8 py-4 bg-transparent border-2 border-teal/80 text-teal hover:bg-teal hover:text-paper rounded-xl text-base font-semibold transition-all duration-300"
+              >
+                Learn More
+              </Link>
+            </div>
+          </div>
+
+          {/* Right Decorative Badge & Visual Highlight */}
+          <div className="lg:col-span-4 hidden lg:flex justify-end">
+            <div className="p-8 rounded-3xl bg-sand/60 border border-sand-deep/80 shadow-lg space-y-6 max-w-sm backdrop-blur-sm">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-teal text-paper flex items-center justify-center font-serif font-bold text-lg">
+                  G
+                </div>
+                <div>
+                  <h4 className="font-serif font-bold text-ink text-base">Goldcoast Dickson</h4>
+                  <p className="font-mono text-xs text-mangrove">Legacy of Service</p>
+                </div>
+              </div>
+              <p className="text-xs text-mangrove leading-relaxed border-t border-sand-deep pt-4">
+                "Carrying forward community empowerment, healthcare access, and education across Bayelsa and the Niger Delta region."
+              </p>
+              <div className="flex items-center justify-between text-xs font-mono text-clay-deep pt-2">
+                <span>EST. 2012</span>
+                <span>BAYELSA, NIGERIA</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
-      <style>{`
-        @keyframes scaleIn {
-          from {
-            opacity: 0;
-            transform: scale(0.8);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          * {
-            animation: none !important;
-            transition: none !important;
-          }
-        }
-      `}</style>
     </section>
   )
 }

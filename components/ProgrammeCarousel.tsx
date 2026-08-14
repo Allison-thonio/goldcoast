@@ -19,7 +19,7 @@ const PROGRAMMES = [
     title: 'Education',
     slug: 'education',
     description: 'Educational support, skills training, and literacy programmes empowering youth and communities.',
-    color: 'bg-mangrove',
+    color: 'bg-teal-ink',
     accent: 'text-sand',
   },
   {
@@ -28,7 +28,7 @@ const PROGRAMMES = [
     title: 'Youth Development',
     slug: 'youth-development',
     description: 'Mentorship, talent spotlighting, and career development initiatives for the next generation.',
-    color: 'bg-clay',
+    color: 'bg-mangrove',
     accent: 'text-paper',
   },
 ]
@@ -63,48 +63,67 @@ export default function ProgrammeCarousel() {
     setActiveIdx((prev) => (prev - 1 + PROGRAMMES.length) % PROGRAMMES.length)
   }
 
-  const programme = PROGRAMMES[activeIdx]
-
   return (
     <section className="relative w-full bg-paper">
-      {/* Full-Bleed Carousel */}
+      {/* Full-Bleed Carousel — all panels commit to dark treatment */}
       <div className="relative w-full aspect-video md:min-h-96">
         {PROGRAMMES.map((prog, idx) => (
           <div
             key={prog.id}
-            className={`absolute inset-0 transition-opacity duration-700 ${
-              idx === activeIdx ? 'opacity-100' : 'opacity-0'
-            } ${prog.color}`}
+            className={`absolute inset-0 ${prog.color}`}
             style={{
-              animation: prefersReducedMotion
-                ? 'none'
-                : idx === activeIdx
-                  ? 'fadeIn 0.7s ease-out'
-                  : 'none',
+              opacity: idx === activeIdx ? 1 : 0,
+              transition: `opacity var(--duration-reveal) var(--ease-settle)`,
+              animation:
+                prefersReducedMotion || idx !== activeIdx
+                  ? 'none'
+                  : `fadeIn var(--duration-reveal) var(--ease-settle)`,
             }}
           >
             {/* Content Overlay */}
             <div className="h-full flex flex-col items-center justify-center px-4 md:px-8 text-center">
               <div className="max-w-2xl">
+                {/* ─── Section anatomy: eyebrow → heading → copy → CTA ─── */}
+
+                {/* Eyebrow */}
+                <span className="eyebrow text-paper/60 bg-paper/10 mb-4 inline-block">
+                  Our Programmes
+                </span>
+
                 {/* Number */}
-                <div className="font-mono text-sm text-paper/60 mb-4">
+                <div className="font-mono text-sm text-paper/50 mb-4 tabular-nums">
                   {prog.number}
                 </div>
 
-                {/* Title */}
-                <h2 className="font-serif text-5xl md:text-6xl font-bold text-paper mb-6">
+                {/* Title — uses --text-section */}
+                <h2
+                  className="font-serif font-bold text-paper mb-6"
+                  style={{ fontSize: 'var(--text-section)' }}
+                >
                   {prog.title}
                 </h2>
 
                 {/* Description */}
-                <p className="text-paper/90 text-lg leading-relaxed mb-8">
+                <p
+                  className="text-paper/90 leading-relaxed mb-8"
+                  style={{ fontSize: 'var(--text-body-lg)' }}
+                >
                   {prog.description}
                 </p>
 
                 {/* CTA */}
                 <Link
                   href={`/programmes/${prog.slug}`}
-                  className="inline-block px-8 py-3 bg-paper text-ink rounded font-medium hover:bg-sand transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-paper"
+                  className="inline-block px-8 py-3 bg-paper text-ink rounded font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-paper"
+                  style={{
+                    transition: `background-color var(--duration-hover) var(--ease-settle)`,
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.backgroundColor = 'var(--color-sand)')
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.backgroundColor = 'var(--color-paper)')
+                  }
                 >
                   Learn More →
                 </Link>
@@ -117,7 +136,7 @@ export default function ProgrammeCarousel() {
       {/* Controls */}
       <div className="bg-paper px-4 md:px-8 py-6 flex items-center justify-between md:justify-center md:gap-12">
         {/* Counter */}
-        <div className="font-mono text-sm text-ink">
+        <div className="font-mono text-sm text-ink tabular-nums">
           <span className="font-bold">{String(activeIdx + 1).padStart(2, '0')}</span>
           <span className="text-mangrove">/ {String(PROGRAMMES.length).padStart(2, '0')}</span>
         </div>
@@ -127,14 +146,20 @@ export default function ProgrammeCarousel() {
           <button
             onClick={handlePrev}
             aria-label="Previous programme"
-            className="w-12 h-12 flex items-center justify-center border border-ink rounded hover:bg-sand transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+            className="w-12 h-12 flex items-center justify-center border border-ink rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+            style={{ transition: `background-color var(--duration-hover) var(--ease-settle)` }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-sand)')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '')}
           >
             ←
           </button>
           <button
             onClick={handleNext}
             aria-label="Next programme"
-            className="w-12 h-12 flex items-center justify-center border border-ink rounded hover:bg-sand transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+            className="w-12 h-12 flex items-center justify-center border border-ink rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+            style={{ transition: `background-color var(--duration-hover) var(--ease-settle)` }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--color-sand)')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '')}
           >
             →
           </button>
@@ -150,9 +175,10 @@ export default function ProgrammeCarousel() {
                 setIsAutoplay(false)
               }}
               aria-label={`Go to programme ${idx + 1}`}
-              className={`w-2 h-2 rounded-full transition-all ${
+              className={`w-2 h-2 rounded-full ${
                 idx === activeIdx ? 'bg-ink w-6' : 'bg-mangrove'
               }`}
+              style={{ transition: `all var(--duration-hover) var(--ease-settle)` }}
             />
           ))}
         </div>
@@ -161,29 +187,16 @@ export default function ProgrammeCarousel() {
         <button
           onClick={() => setIsAutoplay(!isAutoplay)}
           aria-label={isAutoplay ? 'Pause autoplay' : 'Resume autoplay'}
-          className="font-mono text-xs text-mangrove hover:text-ink transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink rounded px-2 py-1"
+          className="font-mono text-xs text-mangrove rounded px-2 py-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          style={{ transition: `color var(--duration-hover) var(--ease-settle)` }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--color-ink)')}
+          onMouseLeave={(e) => (e.currentTarget.style.color = '')}
         >
           {isAutoplay ? '⏸' : '▶'}
         </button>
       </div>
 
       <style>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          * {
-            animation: none !important;
-            transition: none !important;
-          }
-        }
-
         @media (max-width: 768px) {
           .aspect-video {
             aspect-ratio: 3 / 4;

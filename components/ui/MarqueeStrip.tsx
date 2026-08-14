@@ -87,27 +87,6 @@ export function MarqueeStrip() {
           ))}
         </div>
       </div>
-
-      <style>{`
-        @keyframes marqueeLeft {
-          0% { transform: translateX(0%); }
-          100% { transform: translateX(-100%); }
-        }
-        @keyframes marqueeRight {
-          0% { transform: translateX(0%); }
-          100% { transform: translateX(100%); }
-        }
-        .animate-marquee-left {
-          animation: marqueeLeft 35s linear infinite;
-        }
-        .animate-marquee-right {
-          animation: marqueeRight 35s linear infinite;
-        }
-        @media (max-width: 768px) {
-          .animate-marquee-left { animation-duration: 55s; }
-          .animate-marquee-right { animation-duration: 55s; }
-        }
-      `}</style>
     </div>
   )
 }
