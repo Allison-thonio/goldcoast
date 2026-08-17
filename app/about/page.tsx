@@ -1,4 +1,5 @@
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
+import { ScrollingAnimation } from '@/components/ui/scrolling-animation'
 
 export const metadata = {
   title: 'About Goldcoast Foundation',
@@ -7,23 +8,9 @@ export const metadata = {
 
 export default function About() {
   return (
-    <div className="bg-paper min-h-screen pt-24">
-      {/* Hero */}
-      <section className="bg-sand py-20 px-4 border-b border-sand-deep">
-        <div className="container-goldcoast max-w-4xl">
-          <ScrollReveal>
-            <span className="eyebrow text-mangrove bg-mangrove/10 mb-4 inline-block">
-              Est. 2012 · Bayelsa, Nigeria
-            </span>
-            <h1 className="font-serif font-bold text-ink text-4xl sm:text-5xl mb-6">
-              About Goldcoast Foundation
-            </h1>
-            <p className="text-mangrove text-lg sm:text-xl leading-relaxed max-w-2xl">
-              Dedicated to serving vulnerable communities in the Niger Delta through health, education, and youth development initiatives.
-            </p>
-          </ScrollReveal>
-        </div>
-      </section>
+    <div className="bg-paper min-h-screen">
+      {/* Scrolling Animation Hero */}
+      <ScrollingAnimation />
 
       {/* Founder & Mission */}
       <section className="py-20 px-4">

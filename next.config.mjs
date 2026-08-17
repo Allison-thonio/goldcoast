@@ -33,7 +33,7 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy-Report-Only',
-            value: "default-src 'self'; script-src 'self' js.paystack.co challenges.cloudflare.com; frame-src challenges.cloudflare.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src fonts.gstatic.com; connect-src 'self' *.convex.cloud *.paystack.co challenges.cloudflare.com",
+            value: "default-src 'self'; img-src 'self' data: blob: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' js.paystack.co challenges.cloudflare.com; frame-src challenges.cloudflare.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src fonts.gstatic.com; connect-src 'self' *.convex.cloud *.paystack.co challenges.cloudflare.com",
           },
         ],
       },

@@ -1,9 +1,9 @@
 import Hero from '@/components/Hero'
 import FieldLedger from '@/components/FieldLedger'
 import ProgrammeCarousel from '@/components/ProgrammeCarousel'
-import RotatingEarth from '@/components/ui/wireframe-dotted-globe'
 import { ScrollReveal } from '@/components/ui/ScrollReveal'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Home() {
   return (
@@ -37,37 +37,45 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Global Impact & 3D Wireframe Globe Section */}
+      {/* Founder's Journey Section */}
       <section className="py-24 px-4 bg-teal-ink text-paper overflow-hidden relative">
         <div className="container-goldcoast relative z-10">
           <ScrollReveal>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               <div className="lg:col-span-5 space-y-6">
                 <span className="eyebrow text-sand bg-sand/10">
-                  Global Reach & Partnerships
+                  Humanity First
                 </span>
                 <h2
                   className="font-serif font-bold text-sand leading-tight"
                   style={{ fontSize: 'var(--text-section)' }}
                 >
-                  Empowering Communities Across Borders
+                  The Journey So Far
                 </h2>
                 <p className="text-paper/80 leading-relaxed" style={{ fontSize: 'var(--text-body-lg)' }}>
-                  From coastal communities in the Niger Delta to international partners worldwide, our initiatives bridge local impact with global support networks.
+                  From coastal communities in the Niger Delta to international partners worldwide, our initiatives bridge local impact with global support networks, touching thousands of lives along the way.
                 </p>
                 <div className="pt-4 flex flex-wrap gap-4">
                   <Link href="/programmes" className="button-secondary inline-block">
                     Explore Our Footprint
                   </Link>
-                  <Link href="/demo" className="px-6 py-3 border border-sand/30 hover:border-sand rounded-xl text-sand font-medium transition-colors">
-                    View Globe Demo
+                  <Link href="/about" className="px-6 py-3 border border-sand/30 hover:border-sand rounded-xl text-sand font-medium transition-colors">
+                    Read Our Story
                   </Link>
                 </div>
               </div>
 
-              <div className="lg:col-span-7 flex justify-center">
-                <div className="w-full max-w-2xl p-4 bg-ink/60 rounded-3xl border border-sand/15 shadow-2xl backdrop-blur-md">
-                  <RotatingEarth width={700} height={500} className="w-full" />
+              <div className="lg:col-span-7 flex justify-center w-full">
+                <div className="relative w-full max-w-2xl min-h-[340px] sm:min-h-[440px] aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border border-sand/20">
+                  <Image
+                    src="/founder-speech.jpg"
+                    alt="The Journey So Far - Humanity First"
+                    fill
+                    priority
+                    className="object-cover object-center"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-teal-ink/40 via-transparent to-transparent"></div>
                 </div>
               </div>
             </div>

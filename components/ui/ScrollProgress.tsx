@@ -12,7 +12,7 @@ export function ScrollProgress() {
       setPrefersReducedMotion(mediaQuery.matches)
     }
 
-    let animationFrameId: number
+    let ticking = false
 
     const updateScrollProgress = () => {
       const scrollTop = window.scrollY
@@ -27,12 +27,20 @@ export function ScrollProgress() {
         barRef.current.style.transform = `scaleX(${progress})`
       }
 
-      animationFrameId = requestAnimationFrame(updateScrollProgress)
+      ticking = false
     }
 
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateScrollProgress)
+        ticking = true
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
     updateScrollProgress()
 
-    return () => cancelAnimationFrame(animationFrameId)
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   if (prefersReducedMotion) return null

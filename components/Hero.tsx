@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface HeroProps {
   tagline?: string
@@ -19,42 +20,33 @@ export default function Hero({
   ctaLink = '/donate',
 }: HeroProps) {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
-  const [wordStates, setWordStates] = useState<boolean[]>([])
-
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     setPrefersReducedMotion(mediaQuery.matches)
   }, [])
 
-  useEffect(() => {
-    const words = title.split(' ')
-    const newWordStates = new Array(words.length).fill(false)
-    setWordStates(newWordStates)
-
-    if (prefersReducedMotion) {
-      setWordStates(new Array(words.length).fill(true))
-      return
-    }
-
-    let delay = 150
-    words.forEach((_, idx) => {
-      setTimeout(() => {
-        setWordStates((prev) => {
-          const next = [...prev]
-          next[idx] = true
-          return next
-        })
-      }, delay + idx * 60)
-    })
-  }, [title, prefersReducedMotion])
-
   const words = title.split(' ')
 
   return (
-    <section className="relative min-h-[85vh] flex items-center justify-start bg-paper pt-32 pb-20 px-4 overflow-hidden border-b border-sand-deep/40">
+    <section className="relative min-h-[85vh] flex items-center justify-start bg-ink pt-32 pb-20 px-4 overflow-hidden border-b border-sand-deep/40">
+      {/* ─── Hero Background Image ─── */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/hero-bg.jpg"
+          alt="Mrs. Goldcoast Dickson"
+          fill
+          priority
+          className="object-cover object-top"
+          quality={100}
+        />
+        {/* Soft dark gradient overlay for text legibility while keeping image crisp */}
+        <div className="absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/75 to-ink/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-transparent to-ink/40" />
+      </div>
+
       {/* ─── Ambient Glow Backgrounds ─── */}
-      <div className="glow-shape glow-shape--strong -top-32 -left-24 w-[550px] h-[550px]" />
-      <div className="glow-shape -bottom-20 right-10 w-[450px] h-[450px] opacity-70" />
+      <div className="glow-shape glow-shape--strong -top-32 -left-24 w-[550px] h-[550px] opacity-40 mix-blend-screen" />
+      <div className="glow-shape -bottom-20 right-10 w-[450px] h-[450px] opacity-30 mix-blend-screen" />
 
       {/* ─── Hero Left-Aligned Container Grid ─── */}
       <div className="container-goldcoast relative z-10 w-full">
@@ -63,18 +55,18 @@ export default function Hero({
           <div className="lg:col-span-8 text-left space-y-8 max-w-3xl">
             {/* Tagline / Eyebrow */}
             <div
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-widest uppercase text-mangrove bg-sand-deep/80 border border-sand-deep"
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-widest uppercase text-paper bg-white/10 border border-white/20 backdrop-blur-md shadow-lg"
               style={{
                 animation: prefersReducedMotion ? 'none' : 'fadeIn 0.6s var(--ease-settle)',
               }}
             >
-              <span className="w-2 h-2 rounded-full bg-clay animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-sand animate-pulse" />
               {tagline}
             </div>
 
             {/* Hero Headline */}
             <h1
-              className="font-serif font-bold text-ink leading-[1.08] tracking-tight text-left"
+              className="font-serif font-bold text-paper leading-[1.08] tracking-tight text-left drop-shadow-md"
               style={{ fontSize: 'var(--text-hero)' }}
             >
               {words.map((word, idx) => (
@@ -83,9 +75,8 @@ export default function Hero({
                   style={{
                     display: 'inline-block',
                     marginRight: '0.22em',
-                    opacity: wordStates[idx] ? 1 : 0,
-                    transform: wordStates[idx] ? 'translateY(0)' : 'translateY(12px)',
-                    transition: prefersReducedMotion ? 'none' : `all 0.55s var(--ease-settle)`,
+                    animation: prefersReducedMotion ? 'none' : 'fadeIn 0.55s var(--ease-settle) both',
+                    animationDelay: prefersReducedMotion ? '0ms' : `${150 + idx * 50}ms`,
                   }}
                 >
                   {word}
@@ -95,7 +86,7 @@ export default function Hero({
 
             {/* Subtitle */}
             <p
-              className="text-mangrove/90 leading-relaxed max-w-2xl text-left"
+              className="text-paper/90 leading-relaxed max-w-2xl text-left drop-shadow-sm font-light"
               style={{
                 fontSize: 'var(--text-body-lg)',
                 animation: prefersReducedMotion ? 'none' : 'fadeIn 0.8s var(--ease-settle) 0.4s both',
@@ -113,13 +104,13 @@ export default function Hero({
             >
               <Link
                 href={ctaLink || '/donate'}
-                className="button-primary px-8 py-4 rounded-xl shadow-lg hover:shadow-teal/20 text-base font-semibold"
+                className="button-primary px-8 py-4 rounded-xl shadow-2xl hover:shadow-teal/40 text-base font-semibold"
               >
                 {ctaLabel}
               </Link>
               <Link
                 href="/about"
-                className="px-8 py-4 bg-transparent border-2 border-teal/80 text-teal hover:bg-teal hover:text-paper rounded-xl text-base font-semibold transition-all duration-300"
+                className="px-8 py-4 bg-paper/10 backdrop-blur-md border border-paper/30 text-paper hover:bg-paper hover:text-ink rounded-xl text-base font-semibold transition-all duration-300"
               >
                 Learn More
               </Link>
@@ -128,20 +119,20 @@ export default function Hero({
 
           {/* Right Decorative Badge & Visual Highlight */}
           <div className="lg:col-span-4 hidden lg:flex justify-end">
-            <div className="p-8 rounded-3xl bg-sand/60 border border-sand-deep/80 shadow-lg space-y-6 max-w-sm backdrop-blur-sm">
+            <div className="p-8 rounded-3xl bg-ink/40 border border-white/20 shadow-2xl space-y-6 max-w-sm backdrop-blur-xl">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-teal text-paper flex items-center justify-center font-serif font-bold text-lg">
+                <div className="w-10 h-10 rounded-full bg-sand text-ink flex items-center justify-center font-serif font-bold text-lg">
                   G
                 </div>
                 <div>
-                  <h4 className="font-serif font-bold text-ink text-base">Goldcoast Dickson</h4>
-                  <p className="font-mono text-xs text-mangrove">Legacy of Service</p>
+                  <h4 className="font-serif font-bold text-paper text-base">Goldcoast Dickson</h4>
+                  <p className="font-mono text-xs text-paper/70">Legacy of Service</p>
                 </div>
               </div>
-              <p className="text-xs text-mangrove leading-relaxed border-t border-sand-deep pt-4">
+              <p className="text-xs text-paper/80 leading-relaxed border-t border-white/20 pt-4">
                 "Carrying forward community empowerment, healthcare access, and education across Bayelsa and the Niger Delta region."
               </p>
-              <div className="flex items-center justify-between text-xs font-mono text-clay-deep pt-2">
+              <div className="flex items-center justify-between text-xs font-mono text-sand/90 pt-2">
                 <span>EST. 2012</span>
                 <span>BAYELSA, NIGERIA</span>
               </div>
