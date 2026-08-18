@@ -6,15 +6,16 @@ import Link from 'next/link'
 import { HandDrawnCircle } from '@/components/ui/HandDrawnCircle'
 
 export default function DonateForm() {
-  const [step, setStep] = useState<'amount' | 'details' | 'method'>('amount')
+  const [step, setStep] = useState<'amount' | 'details'>('amount')
   const [amount, setAmount] = useState<number>(10000)
   const [programme, setProgramme] = useState<string>('all')
   const [donorName, setDonorName] = useState<string>('')
   const [donorEmail, setDonorEmail] = useState<string>('')
-  const [method, setMethod] = useState<'card' | 'bank' | 'crypto'>('card')
+  const [method, setMethod] = useState<'bank' | 'crypto'>('bank')
   const [turnstileToken, setTurnstileToken] = useState<string>('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string>('')
+  const [donationRef, setDonationRef] = useState<string>('')
 
   const presets = [5000, 10000, 25000, 50000, 100000]
 
@@ -49,30 +50,10 @@ export default function DonateForm() {
         return
       }
 
-      if (method === 'card') {
-        // Initialize Paystack
-        const script = document.createElement('script')
-        script.src = 'https://js.paystack.co/v1/inline.js'
-        script.async = true
-        document.body.appendChild(script)
-
-        script.onload = () => {
-          const handler = (window as any).PaystackPop.setup({
-            key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
-            email: donorEmail,
-            amount: amount * 100,
-            ref: data.donationId,
-            onClose: () => setError('Payment window closed'),
-            onSuccess: () => {
-              setStep('details')
-              // In production, verify payment via API
-            },
-          })
-          handler.openIframe()
-        }
-      } else {
-        setStep('details')
+      if (data.donationId) {
+        setDonationRef(data.donationId)
       }
+      setStep('details')
     } catch (err) {
       setError('An error occurred. Please try again.')
     } finally {
@@ -88,8 +69,8 @@ export default function DonateForm() {
           Every contribution supports our health, education, and youth development programmes.
         </p>
 
-        {/* Step 1: Amount */}
-        {step === 'amount' && (
+        {/* Step 1: Amount & Details */}
+        {step === 'amount' ? (
           <div className="space-y-8">
             {/* Programme */}
             <div>
@@ -182,8 +163,7 @@ export default function DonateForm() {
               <label className="block text-sm font-medium text-ink mb-4">Payment Method</label>
               <div className="space-y-3">
                 {[
-                  { value: 'card', label: 'Card (Visa, Mastercard)' },
-                  { value: 'bank', label: 'Bank Transfer' },
+                  { value: 'bank', label: 'Direct Bank Transfer' },
                   { value: 'crypto', label: 'Cryptocurrency' },
                 ].map((opt) => (
                   <label key={opt.value} className="flex items-center gap-3 cursor-pointer p-4 border border-sand-deep rounded hover:bg-sand transition-colors">
@@ -195,7 +175,7 @@ export default function DonateForm() {
                       onChange={(e) => setMethod(e.target.value as any)}
                       className="rounded"
                     />
-                    <span className="text-sm">{opt.label}</span>
+                    <span className="text-sm font-medium">{opt.label}</span>
                   </label>
                 ))}
               </div>
@@ -216,25 +196,105 @@ export default function DonateForm() {
               disabled={!donorName || !donorEmail || !turnstileToken || loading}
               className="w-full py-3 button-primary disabled:opacity-50"
             >
-              {loading ? 'Processing...' : 'Continue'}
+              {loading ? 'Processing...' : 'Continue to Payment Instructions'}
             </button>
+          </div>
+        ) : (
+          /* Step 2: Confirmation & Instructions */
+          <div className="space-y-6 animate-in fade-in duration-300">
+            <div className="p-6 bg-teal-ink text-paper rounded-2xl border border-sand/20 text-center space-y-3 shadow-xl">
+              <div className="w-12 h-12 rounded-full bg-clay text-teal-ink flex items-center justify-center font-bold text-xl mx-auto">
+                ✓
+              </div>
+              <h2 className="prose-heading text-2xl text-paper">Thank You, {donorName}!</h2>
+              <p className="text-sand text-sm">
+                Your donation pledge of <strong className="text-paper font-mono">₦{amount.toLocaleString()}</strong> has been recorded.
+              </p>
+              {donationRef && (
+                <div className="text-xs font-mono bg-black/20 text-sand/80 py-1.5 px-3 rounded-md inline-block">
+                  Reference: {donationRef}
+                </div>
+              )}
+            </div>
+
+            {method === 'bank' ? (
+              <div className="p-6 bg-sand rounded-2xl border border-sand-deep space-y-4">
+                <h3 className="prose-heading text-lg">Bank Transfer Details</h3>
+                <p className="text-sm text-mangrove">
+                  Please make a direct transfer of <strong>₦{amount.toLocaleString()}</strong> to our official foundation bank account:
+                </p>
+                <div className="font-mono text-sm bg-paper p-5 rounded-xl border border-sand-deep space-y-2 shadow-sm">
+                  <div className="flex justify-between items-center py-1 border-b border-sand/50">
+                    <span className="text-mangrove">Bank Name</span>
+                    <strong className="text-ink">United Bank for Africa (UBA)</strong>
+                  </div>
+                  <div className="flex justify-between items-center py-1 border-b border-sand/50">
+                    <span className="text-mangrove">Account Number</span>
+                    <strong className="text-ink text-base tracking-wider">1017079610</strong>
+                  </div>
+                  <div className="flex justify-between items-center py-1">
+                    <span className="text-mangrove">Account Name</span>
+                    <strong className="text-ink">Goldcoast Developmental Foundation</strong>
+                  </div>
+                </div>
+                <p className="text-xs text-mangrove">
+                  After transferring, please share your confirmation receipt via the{' '}
+                  <Link href="/contact" className="text-clay font-semibold hover:underline">
+                    contact form
+                  </Link>{' '}
+                  so we can acknowledge your gift.
+                </p>
+              </div>
+            ) : (
+              <div className="p-6 bg-sand rounded-2xl border border-sand-deep space-y-4">
+                <h3 className="prose-heading text-lg">Cryptocurrency Transfer</h3>
+                <p className="text-sm text-mangrove">
+                  For cryptocurrency contributions (USDT / BTC / ETH), please reach out to our accounts team directly via our{' '}
+                  <Link href="/contact" className="text-clay font-semibold hover:underline">
+                    contact page
+                  </Link>{' '}
+                  with your reference number to receive the verified wallet address.
+                </p>
+              </div>
+            )}
+
+            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+              <Link
+                href="/contact"
+                className="flex-1 py-3 text-center button-primary text-sm"
+              >
+                Send Transfer Receipt
+              </Link>
+              <button
+                onClick={() => {
+                  setStep('amount')
+                  setDonationRef('')
+                }}
+                className="flex-1 py-3 text-center border border-sand-deep bg-sand/60 hover:bg-sand rounded text-sm text-ink transition-colors"
+              >
+                Make Another Donation
+              </button>
+            </div>
           </div>
         )}
 
-        {/* Bank Transfer Info */}
-        <div className="mt-12 p-6 bg-sand rounded border border-sand-deep">
-          <h3 className="prose-heading text-lg mb-4">Bank Transfer</h3>
-          <p className="text-sm text-mangrove mb-4">
-            Send directly to:
-          </p>
-          <div className="font-mono text-sm bg-paper p-4 rounded mb-4">
-            <div>UBA Account: <strong>1017079610</strong></div>
-            <div>Name: <strong>Goldcoast Developmental Foundation</strong></div>
+        {/* Bank Transfer Info Box (Static footer info on amount step) */}
+        {step === 'amount' && (
+          <div className="mt-12 p-6 bg-sand rounded border border-sand-deep">
+            <h3 className="prose-heading text-lg mb-4">Direct Bank Transfer</h3>
+            <p className="text-sm text-mangrove mb-4">
+              You can also send directly to our official bank account anytime:
+            </p>
+            <div className="font-mono text-sm bg-paper p-4 rounded mb-4">
+              <div>Bank: <strong>United Bank for Africa (UBA)</strong></div>
+              <div>Account Number: <strong>1017079610</strong></div>
+              <div>Account Name: <strong>Goldcoast Developmental Foundation</strong></div>
+            </div>
+            <p className="text-xs text-mangrove">
+              Please send your receipt via the <Link href="/contact" className="text-clay hover:underline">contact form</Link> for verification and acknowledgment.
+            </p>
           </div>
-          <p className="text-xs text-mangrove">
-            Please send your receipt via the <Link href="/contact" className="text-clay hover:underline">contact form</Link> for verification and acknowledgment.
-          </p>
-        </div>
+        )}
       </div>
     </div>
   )

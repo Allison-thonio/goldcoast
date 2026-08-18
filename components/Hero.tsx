@@ -33,14 +33,14 @@ export default function Hero({
       <div className="absolute inset-0 z-0">
         <Image
           src="/hero-bg.jpg"
-          alt="Mrs. Goldcoast Dickson"
+          alt="Mrs. Goldcoast Dickson Remembrance"
           fill
           priority
-          className="object-cover object-top"
+          className="object-cover object-right md:object-center"
           quality={100}
         />
         {/* Soft dark gradient overlay for text legibility while keeping image crisp */}
-        <div className="absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/75 to-ink/30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/80 to-ink/35" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-transparent to-ink/40" />
       </div>
 

@@ -2,10 +2,12 @@
 
 import { useState } from 'react'
 import { Turnstile } from '@marsidev/react-turnstile'
+import { CircularCarousel, CarouselItem } from '@/components/ui/circular-carousel'
 
 export default function VolunteerForm() {
   const [formStep, setFormStep] = useState<'areas' | 'form' | 'success'>('areas')
-  const [selectedArea, setSelectedArea] = useState<string>('')
+  const [selectedArea, setSelectedArea] = useState<string>('health')
+  const [activeCarouselIdx, setActiveCarouselIdx] = useState<number>(0)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -15,10 +17,25 @@ export default function VolunteerForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const areas = [
-    { id: 'health', title: 'Health Outreach', description: 'Community health programmes and outreach' },
-    { id: 'education', title: 'Education/Literacy', description: 'Educational support and literacy programmes' },
-    { id: 'youth', title: 'Youth Mentorship', description: 'Mentorship and career guidance' },
+  const volunteerAreas: CarouselItem[] = [
+    {
+      id: 'health',
+      title: 'Healthcare Outreach',
+      description: 'Join volunteer medical teams, nurse clinics, free drug dispensaries, and maternal screening drives across the Niger Delta.',
+      tag: '01 • Health',
+    },
+    {
+      id: 'education',
+      title: 'Girl-Child Education',
+      description: 'Support educational tutoring, distribution of school supplies, books, and literacy mentorship for vulnerable girls.',
+      tag: '02 • Education',
+    },
+    {
+      id: 'youth',
+      title: 'Youth & Skills Mentorship',
+      description: 'Mentor youth in vocational skills, fashion academies, digital technology, and creative enterprise development.',
+      tag: '03 • Youth Dev',
+    },
   ]
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -62,31 +79,54 @@ export default function VolunteerForm() {
   }
 
   if (formStep === 'areas') {
+    const activeItem = volunteerAreas[activeCarouselIdx] || volunteerAreas[0]
+
     return (
-      <section className="py-20 px-4">
-        <div className="container-goldcoast">
-          <h2 className="prose-heading text-2xl mb-12 text-center">Areas of Interest</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto mb-12">
-            {areas.map((area) => (
+      <section className="py-16 px-4 bg-paper border-b border-sand-deep/40">
+        <div className="container-goldcoast max-w-4xl mx-auto text-center">
+          <span className="eyebrow text-teal-ink bg-sand/80 mb-3 inline-block">
+            Volunteer Tracks
+          </span>
+          <h2 className="font-serif text-3xl md:text-4xl font-bold text-ink mb-3">
+            Choose Your Area of Service
+          </h2>
+          <p className="text-mangrove max-w-xl mx-auto mb-10 text-base md:text-lg">
+            Select one of our three core impact initiatives to begin your volunteer journey.
+          </p>
+
+          <div className="bg-sand/30 border border-sand-deep/40 rounded-3xl p-6 md:p-10 shadow-sm mb-8">
+            <CircularCarousel
+              items={volunteerAreas}
+              activeIndex={activeCarouselIdx}
+              onActiveChange={(idx) => {
+                setActiveCarouselIdx(idx)
+                setSelectedArea(volunteerAreas[idx].id)
+              }}
+              onSelect={(item, idx) => {
+                setActiveCarouselIdx(idx)
+                setSelectedArea(item.id)
+                setFormStep('form')
+              }}
+            />
+
+            <div className="mt-8 pt-6 border-t border-sand-deep/40 flex flex-col items-center">
               <button
-                key={area.id}
                 onClick={() => {
-                  setSelectedArea(area.id)
+                  setSelectedArea(activeItem.id)
                   setFormStep('form')
                 }}
-                className="p-6 border-2 border-sand-deep rounded hover:border-clay hover:shadow-lg transition-all text-left group"
+                className="button-primary px-8 py-3.5 text-base font-semibold shadow-md hover:scale-[1.02] transition-transform cursor-pointer"
               >
-                <h3 className="prose-heading text-lg mb-2 group-hover:text-clay transition-colors">
-                  {area.title}
-                </h3>
-                <p className="text-sm text-mangrove">{area.description}</p>
+                Apply for {activeItem.title} →
               </button>
-            ))}
+            </div>
           </div>
         </div>
       </section>
     )
   }
+
+  const selectedTrack = volunteerAreas.find((a) => a.id === selectedArea) || volunteerAreas[0]
 
   if (formStep === 'form') {
     return (
@@ -98,7 +138,12 @@ export default function VolunteerForm() {
           >
             ← Back
           </button>
-          <h2 className="prose-heading text-2xl mb-8">Volunteer Application</h2>
+          <h2 className="prose-heading text-2xl md:text-3xl mb-2">Volunteer Application</h2>
+          {selectedTrack && (
+            <div className="inline-block bg-teal-ink text-sand px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider mb-6">
+              Track: {selectedTrack.title}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>

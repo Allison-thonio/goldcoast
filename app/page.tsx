@@ -170,7 +170,7 @@ export default function Home() {
               Your donation directly supports health outreach, educational initiatives, and youth development programmes across the Niger Delta.
             </p>
             <p className="text-sm mb-8 opacity-75">
-              We accept donations via card, bank transfer, or cryptocurrency.
+              We accept donations via direct bank transfer or cryptocurrency.
             </p>
             <Link href="/donate" className="button-primary inline-block px-8 py-4 rounded-xl">
               Make a Donation
