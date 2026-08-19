@@ -33,10 +33,10 @@ export default function Hero({
       <div className="absolute inset-0 z-0">
         <Image
           src="/hero-bg.jpg"
-          alt="Mrs. Goldcoast Dickson Remembrance"
+          alt="Gold Coast Developmental Foundation community outreach"
           fill
           priority
-          className="object-cover object-right md:object-center"
+          className="object-cover object-center"
           quality={100}
         />
         {/* Soft dark gradient overlay for text legibility while keeping image crisp */}

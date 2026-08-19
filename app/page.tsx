@@ -69,7 +69,7 @@ export default function Home() {
                 <div className="relative w-full max-w-2xl min-h-[340px] sm:min-h-[440px] aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border border-sand/20">
                   <Image
                     src="/founder-speech.jpg"
-                    alt="The Journey So Far - Humanity First"
+                    alt="Founder speaking at The Journey So Far event - Humanity First"
                     fill
                     priority
                     className="object-cover object-center"
@@ -170,7 +170,7 @@ export default function Home() {
               Your donation directly supports health outreach, educational initiatives, and youth development programmes across the Niger Delta.
             </p>
             <p className="text-sm mb-8 opacity-75">
-              We accept donations via direct bank transfer or cryptocurrency.
+              We accept donations via direct bank transfer.
             </p>
             <Link href="/donate" className="button-primary inline-block px-8 py-4 rounded-xl">
               Make a Donation

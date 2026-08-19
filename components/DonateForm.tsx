@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Turnstile } from '@marsidev/react-turnstile'
 import Link from 'next/link'
+import Image from 'next/image'
 import { HandDrawnCircle } from '@/components/ui/HandDrawnCircle'
 
 export default function DonateForm() {
@@ -63,9 +64,12 @@ export default function DonateForm() {
 
   return (
     <div className="min-h-screen bg-paper py-12 px-4">
-      <div className="container-goldcoast max-w-2xl mx-auto">
-        <h1 className="prose-heading text-4xl mb-4 text-center">Make a Donation</h1>
-        <p className="text-center text-mangrove mb-12">
+      <div className="container-goldcoast max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        {/* ─── Left: Form Column ─── */}
+        <div className="lg:col-span-7">
+        <h1 className="prose-heading text-4xl mb-4 text-center lg:text-left">Make a Donation</h1>
+        <p className="text-center lg:text-left text-mangrove mb-12">
           Every contribution supports our health, education, and youth development programmes.
         </p>
 
@@ -158,28 +162,7 @@ export default function DonateForm() {
               </div>
             </div>
 
-            {/* Payment Method */}
-            <div>
-              <label className="block text-sm font-medium text-ink mb-4">Payment Method</label>
-              <div className="space-y-3">
-                {[
-                  { value: 'bank', label: 'Direct Bank Transfer' },
-                  { value: 'crypto', label: 'Cryptocurrency' },
-                ].map((opt) => (
-                  <label key={opt.value} className="flex items-center gap-3 cursor-pointer p-4 border border-sand-deep rounded hover:bg-sand transition-colors">
-                    <input
-                      type="radio"
-                      name="method"
-                      value={opt.value}
-                      checked={method === opt.value as any}
-                      onChange={(e) => setMethod(e.target.value as any)}
-                      className="rounded"
-                    />
-                    <span className="text-sm font-medium">{opt.label}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
+
 
             {/* Turnstile */}
             <div className="flex justify-center">
@@ -217,46 +200,33 @@ export default function DonateForm() {
               )}
             </div>
 
-            {method === 'bank' ? (
-              <div className="p-6 bg-sand rounded-2xl border border-sand-deep space-y-4">
-                <h3 className="prose-heading text-lg">Bank Transfer Details</h3>
-                <p className="text-sm text-mangrove">
-                  Please make a direct transfer of <strong>₦{amount.toLocaleString()}</strong> to our official foundation bank account:
-                </p>
-                <div className="font-mono text-sm bg-paper p-5 rounded-xl border border-sand-deep space-y-2 shadow-sm">
-                  <div className="flex justify-between items-center py-1 border-b border-sand/50">
-                    <span className="text-mangrove">Bank Name</span>
-                    <strong className="text-ink">United Bank for Africa (UBA)</strong>
-                  </div>
-                  <div className="flex justify-between items-center py-1 border-b border-sand/50">
-                    <span className="text-mangrove">Account Number</span>
-                    <strong className="text-ink text-base tracking-wider">1017079610</strong>
-                  </div>
-                  <div className="flex justify-between items-center py-1">
-                    <span className="text-mangrove">Account Name</span>
-                    <strong className="text-ink">Goldcoast Developmental Foundation</strong>
-                  </div>
+            <div className="p-6 bg-sand rounded-2xl border border-sand-deep space-y-4">
+              <h3 className="prose-heading text-lg">Bank Transfer Details</h3>
+              <p className="text-sm text-mangrove">
+                Please make a direct transfer of <strong>₦{amount.toLocaleString()}</strong> to our official foundation bank account:
+              </p>
+              <div className="font-mono text-sm bg-paper p-5 rounded-xl border border-sand-deep space-y-2 shadow-sm">
+                <div className="flex justify-between items-center py-1 border-b border-sand/50">
+                  <span className="text-mangrove">Bank Name</span>
+                  <strong className="text-ink">United Bank for Africa (UBA)</strong>
                 </div>
-                <p className="text-xs text-mangrove">
-                  After transferring, please share your confirmation receipt via the{' '}
-                  <Link href="/contact" className="text-clay font-semibold hover:underline">
-                    contact form
-                  </Link>{' '}
-                  so we can acknowledge your gift.
-                </p>
+                <div className="flex justify-between items-center py-1 border-b border-sand/50">
+                  <span className="text-mangrove">Account Number</span>
+                  <strong className="text-ink text-base tracking-wider">1017079610</strong>
+                </div>
+                <div className="flex justify-between items-center py-1">
+                  <span className="text-mangrove">Account Name</span>
+                  <strong className="text-ink">Goldcoast Developmental Foundation</strong>
+                </div>
               </div>
-            ) : (
-              <div className="p-6 bg-sand rounded-2xl border border-sand-deep space-y-4">
-                <h3 className="prose-heading text-lg">Cryptocurrency Transfer</h3>
-                <p className="text-sm text-mangrove">
-                  For cryptocurrency contributions (USDT / BTC / ETH), please reach out to our accounts team directly via our{' '}
-                  <Link href="/contact" className="text-clay font-semibold hover:underline">
-                    contact page
-                  </Link>{' '}
-                  with your reference number to receive the verified wallet address.
-                </p>
-              </div>
-            )}
+              <p className="text-xs text-mangrove">
+                After transferring, please share your confirmation receipt via the{' '}
+                <Link href="/contact" className="text-clay font-semibold hover:underline">
+                  contact form
+                </Link>{' '}
+                so we can acknowledge your gift.
+              </p>
+            </div>
 
             <div className="flex flex-col sm:flex-row gap-3 pt-4">
               <Link
@@ -295,6 +265,28 @@ export default function DonateForm() {
             </p>
           </div>
         )}
+        </div>
+
+        {/* ─── Right: Award Image Sidebar ─── */}
+        <div className="hidden lg:block lg:col-span-5 sticky top-28">
+          <div className="rounded-3xl overflow-hidden border border-sand-deep shadow-xl bg-sand">
+            <div className="relative aspect-[3/4] w-full">
+              <Image
+                src="/award.jpg"
+                alt="Humanitarian Service Award presented to Gold Coast Foundation by South South Media Week, 2019"
+                fill
+                className="object-cover object-center"
+                sizes="(max-width: 1024px) 0vw, 40vw"
+              />
+            </div>
+            <div className="p-5 text-center space-y-1">
+              <p className="font-serif font-bold text-ink text-sm">Humanitarian Service Award</p>
+              <p className="font-mono text-xs text-mangrove">South South Media Week · 2019</p>
+            </div>
+          </div>
+        </div>
+
+        </div>
       </div>
     </div>
   )
